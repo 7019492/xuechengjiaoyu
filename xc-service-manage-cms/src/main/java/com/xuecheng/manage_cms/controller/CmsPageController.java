@@ -35,7 +35,7 @@ public class CmsPageController implements CmsPageControllerApi {
     @Override
     @GetMapping("/get/{id}")
     public CmsPage findById(@PathVariable("id") String id) {
-        return cmsPageService.findById(id);
+        return cmsPageService.getById(id);
     }
 
     @Override

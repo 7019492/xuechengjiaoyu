@@ -19,6 +19,11 @@ public class CmsConfigController implements CmsConfigControllerApi {
     @Autowired
     CmsConfigService cmsConfigService;
 
+    /**
+     * 获取数据模型 根据id
+     * @param id
+     * @return
+     */
     @Override
     @GetMapping("/getmodel/{id}")
     public CmsConfig getmodel(@PathVariable("id") String id) {

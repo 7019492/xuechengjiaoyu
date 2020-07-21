@@ -15,9 +15,12 @@ public interface CmsPageService {
 
     CmsPageResult add(CmsPage cmsPage);
 
-    CmsPage findById(String id);
+    CmsPage getById(String id);
 
     CmsPageResult edit(String id, CmsPage cmsPage);
 
     ResponseResult delete(String id);
+
+    // 页面静态化方法
+    String getPageHtml(String pageId);
 }

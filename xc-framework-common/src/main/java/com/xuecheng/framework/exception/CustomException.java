@@ -12,7 +12,7 @@ public class CustomException extends RuntimeException {
     // 错误代码
     private ResultCode resultCode;
 
-    public CustomException(ResultCode resultCode) {
+    CustomException(ResultCode resultCode) {
         this.resultCode = resultCode;
     }
 

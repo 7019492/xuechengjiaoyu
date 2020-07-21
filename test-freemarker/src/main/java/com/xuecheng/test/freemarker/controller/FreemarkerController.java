@@ -1,9 +1,11 @@
 package com.xuecheng.test.freemarker.controller;
 
 import com.xuecheng.test.freemarker.model.Student;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.*;
 
@@ -14,6 +16,18 @@ import java.util.*;
 @Controller
 @RequestMapping("/freemarker")
 public class FreemarkerController {
+
+    @Autowired
+    RestTemplate restTemplate;
+
+    @RequestMapping("/banner")
+    public String index_banner(Map<String, Object> map) {
+        // 请求轮播图模型数据
+        ResponseEntity<Map> result = restTemplate.getForEntity("http://localhost:31001/cms/config/getmodel/5a791725dd573c3574ee333f", Map.class);
+        Map body = result.getBody();
+        map.putAll(body);
+        return "index_banner";
+    }
 
     // 测试1
     @RequestMapping("/test1")
@@ -38,15 +52,15 @@ public class FreemarkerController {
         stus.add(stu1);
         stus.add(stu2);
         //向数据模型放数据
-        map.put("stus",stus);
+        map.put("stus", stus);
         //准备map数据
-        HashMap<String,Student> stuMap = new HashMap<>();
+        HashMap<String, Student> stuMap = new HashMap<>();
 //        stuMap.put("stu1",stu1);
-        stuMap.put("stu2",stu2);
+        stuMap.put("stu2", stu2);
         //向数据模型放数据
-        map.put("stu1",stu1);
+        map.put("stu1", stu1);
         //向数据模型放数据
-        map.put("stuMap",stuMap);
+        map.put("stuMap", stuMap);
         // 返回freemarker模板位置，基于resource/templates路径的
         return "test1";
     }
