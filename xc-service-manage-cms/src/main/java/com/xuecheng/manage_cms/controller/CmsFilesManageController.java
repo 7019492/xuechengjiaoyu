@@ -71,5 +71,9 @@ public class CmsFilesManageController {
 
     }
     // 删除文件
+    @RequestMapping("deleteFileById")
+    public void deleteFileById(String fileId){
+        gridFsTemplate.delete(Query.query(Criteria.where("_id").is(fileId)));
+    }
     // 更新文件
 }
