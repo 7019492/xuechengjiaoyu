@@ -23,4 +23,7 @@ public interface CmsPageService {
 
     // 页面静态化方法
     String getPageHtml(String pageId);
+
+    // 页面发布
+    ResponseResult post(String pageId);
 }
