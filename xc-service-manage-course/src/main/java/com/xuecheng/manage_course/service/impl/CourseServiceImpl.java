@@ -3,6 +3,7 @@ package com.xuecheng.manage_course.service.impl;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.xuecheng.framework.domain.course.CourseBase;
+import com.xuecheng.framework.domain.course.CourseMarket;
 import com.xuecheng.framework.domain.course.Teachplan;
 import com.xuecheng.framework.domain.course.ext.CourseInfo;
 import com.xuecheng.framework.domain.course.ext.TeachplanNode;
@@ -13,10 +14,7 @@ import com.xuecheng.framework.model.response.CommonCode;
 import com.xuecheng.framework.model.response.QueryResponseResult;
 import com.xuecheng.framework.model.response.QueryResult;
 import com.xuecheng.framework.model.response.ResponseResult;
-import com.xuecheng.manage_course.dao.CourseBaseRepository;
-import com.xuecheng.manage_course.dao.CourseMapper;
-import com.xuecheng.manage_course.dao.TeachplanMapper;
-import com.xuecheng.manage_course.dao.TeachplanRepository;
+import com.xuecheng.manage_course.dao.*;
 import com.xuecheng.manage_course.service.CourseService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -45,6 +43,9 @@ public class CourseServiceImpl implements CourseService {
 
     @Autowired
     CourseMapper courseMapper;
+
+    @Autowired
+    CourseMarketRepository courseMarketRepository;
 
     @Override
     public TeachplanNode findTeachplanList(String courseId) {
@@ -108,6 +109,57 @@ public class CourseServiceImpl implements CourseService {
         courseBase.setStatus("202001");
         CourseBase save = courseBaseRepository.save(courseBase);
         return new AddCourseResult(CommonCode.SUCCESS, save.getId());
+    }
+
+    @Override
+    public CourseBase getCourseBaseById(String courseId) {
+        Optional<CourseBase> opt = courseBaseRepository.findById(courseId);
+        return opt.orElse(null);
+    }
+
+    @Override
+    @Transactional
+    public ResponseResult updateCourseBase(String id, CourseBase courseBase) {
+        CourseBase courseBase1 = getCourseBaseById(id);
+        if (courseBase1 == null) ExceptionCast.cast(CommonCode.INVALID_PARAM);
+        courseBase1.setName(courseBase.getName());
+        courseBase1.setMt(courseBase.getMt());
+        courseBase1.setSt(courseBase.getSt());
+        courseBase1.setStudymodel(courseBase.getStudymodel());
+        courseBase1.setUsers(courseBase.getUsers());
+        courseBase1.setDescription(courseBase.getDescription());
+        CourseBase save = courseBaseRepository.save(courseBase1);
+        return new ResponseResult(CommonCode.SUCCESS);
+    }
+
+    @Override
+    public CourseMarket getCourseMarketById(String courseId) {
+        Optional<CourseMarket> opt = courseMarketRepository.findById(courseId);
+        return opt.orElse(null);
+    }
+
+    @Override
+    @Transactional
+    public CourseMarket saveCourseMarket(String id, CourseMarket courseMarket) {
+        CourseMarket one = getCourseMarketById(id);
+        if (one == null) { // 新增
+            //添加课程营销信息
+            one = new CourseMarket();
+            BeanUtils.copyProperties(courseMarket, one);
+            //设置课程id
+            one.setId(id);
+            courseMarketRepository.save(one);
+        } else { // 修改
+            one.setCharge(courseMarket.getCharge());
+            one.setStartTime(courseMarket.getStartTime());//课程有效期，开始时间
+            one.setEndTime(courseMarket.getEndTime());//课程有效期，结束时间
+            one.setPrice(courseMarket.getPrice());
+            one.setQq(courseMarket.getQq());
+            one.setValid(courseMarket.getValid());
+            courseMarketRepository.save(one);
+        }
+
+        return one;
     }
 
     // 查询课程的根据点，如果查询不到，要自动添加根节点

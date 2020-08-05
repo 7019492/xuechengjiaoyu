@@ -1,6 +1,7 @@
 package com.xuecheng.manage_course.service;
 
 import com.xuecheng.framework.domain.course.CourseBase;
+import com.xuecheng.framework.domain.course.CourseMarket;
 import com.xuecheng.framework.domain.course.Teachplan;
 import com.xuecheng.framework.domain.course.ext.CourseInfo;
 import com.xuecheng.framework.domain.course.ext.TeachplanNode;
@@ -29,4 +30,16 @@ public interface CourseService {
 
     // 添加课程基本信息
     AddCourseResult addCourseBase(CourseBase courseBase);
+
+    // 获取课程基础信息
+    CourseBase getCourseBaseById(String courseId);
+
+    // 更新课程基础信息
+    ResponseResult updateCourseBase(String id, CourseBase courseBase);
+
+    // 获取课程营销信息
+    CourseMarket getCourseMarketById(String courseId);
+
+    // 更新课程营销信息
+    CourseMarket saveCourseMarket(String id, CourseMarket courseMarket);
 }
