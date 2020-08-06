@@ -2,12 +2,14 @@ package com.xuecheng.manage_course.service;
 
 import com.xuecheng.framework.domain.course.CourseBase;
 import com.xuecheng.framework.domain.course.CourseMarket;
+import com.xuecheng.framework.domain.course.CoursePic;
 import com.xuecheng.framework.domain.course.Teachplan;
 import com.xuecheng.framework.domain.course.ext.CourseInfo;
 import com.xuecheng.framework.domain.course.ext.TeachplanNode;
 import com.xuecheng.framework.domain.course.request.CourseListRequest;
 import com.xuecheng.framework.domain.course.response.AddCourseResult;
 import com.xuecheng.framework.model.response.QueryResponseResult;
+import com.xuecheng.framework.model.response.Response;
 import com.xuecheng.framework.model.response.ResponseResult;
 
 import java.util.List;
@@ -42,4 +44,13 @@ public interface CourseService {
 
     // 更新课程营销信息
     CourseMarket saveCourseMarket(String id, CourseMarket courseMarket);
+
+    // 添加课程图片
+    ResponseResult saveCoursePic(String courseId, String pic);
+
+    // 获取课程图片
+    CoursePic findCoursePic(String courseId);
+
+    // 删除课程图片
+    ResponseResult deleteCoursePic(String courseId);
 }

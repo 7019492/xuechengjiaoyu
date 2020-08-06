@@ -4,6 +4,7 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.xuecheng.framework.domain.course.CourseBase;
 import com.xuecheng.framework.domain.course.CourseMarket;
+import com.xuecheng.framework.domain.course.CoursePic;
 import com.xuecheng.framework.domain.course.Teachplan;
 import com.xuecheng.framework.domain.course.ext.CourseInfo;
 import com.xuecheng.framework.domain.course.ext.TeachplanNode;
@@ -46,6 +47,9 @@ public class CourseServiceImpl implements CourseService {
 
     @Autowired
     CourseMarketRepository courseMarketRepository;
+
+    @Autowired
+    CoursePicRepository coursePicRepository;
 
     @Override
     public TeachplanNode findTeachplanList(String courseId) {
@@ -160,6 +164,39 @@ public class CourseServiceImpl implements CourseService {
         }
 
         return one;
+    }
+
+    @Override
+    @Transactional
+    public ResponseResult saveCoursePic(String courseId, String pic) {
+        // 查询课程图片
+        Optional<CoursePic> opt = coursePicRepository.findById(courseId);
+        CoursePic coursePic = null;
+        if (opt.isPresent()) {
+            coursePic = opt.get();
+        }
+        // 如果没有课程图片则新建对象
+        if (coursePic == null) {
+            coursePic = new CoursePic();
+        }
+        coursePic.setCourseid(courseId);
+        coursePic.setPic(pic);
+        coursePicRepository.save(coursePic);
+        return new ResponseResult(CommonCode.SUCCESS);
+    }
+
+    @Override
+    public CoursePic findCoursePic(String courseId) {
+        Optional<CoursePic> opt = coursePicRepository.findById(courseId);
+        return opt.orElse(null);
+    }
+
+    @Override
+    @Transactional
+    public ResponseResult deleteCoursePic(String courseId) {
+        long result = coursePicRepository.deleteByCourseid(courseId);
+        if (result > 0) return new ResponseResult(CommonCode.SUCCESS);
+        return ResponseResult.FAIL();
     }
 
     // 查询课程的根据点，如果查询不到，要自动添加根节点
